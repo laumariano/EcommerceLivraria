@@ -10,19 +10,24 @@ public class Main {
         int opcao;
         do {
             exibirMenu();
-            opcao = Integer.parseInt(scanner.nextLine());
-            switch (opcao) {
-                case 1:
-                    cadastrarProduto();
-                    break;
-                case 2:
-                    visualizarProdutos();
-                    break;
-                case 3:
-                    System.out.println("Saindo...");
-                    break;
-                default:
-                    System.out.println("Opção inválida!");
+            try {
+                opcao = Integer.parseInt(scanner.nextLine());
+                switch (opcao) {
+                    case 1:
+                        cadastrarProduto();
+                        break;
+                    case 2:
+                        visualizarProdutos();
+                        break;
+                    case 3:
+                        System.out.println("Saindo...");
+                        break;
+                    default:
+                        System.out.println("Opção inválida!");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Por favor, insira um número válido.");
+                opcao = 0;
             }
         } while (opcao != 3);
     }
@@ -35,7 +40,6 @@ public class Main {
         System.out.print("Escolha uma opção: ");
     }
 
-
     private static void cadastrarProduto() {
         System.out.println("\n===== Cadastro de Produto =====");
         System.out.print("Digite o nome do produto: ");
@@ -44,31 +48,28 @@ public class Main {
         double preco = 0;
         boolean valido = false;
         while (!valido) {
-            if (scanner.hasNextDouble()) {
-                preco = scanner.nextDouble();
+            try {
+                preco = Double.parseDouble(scanner.nextLine());
                 if (preco > 0) {
                     valido = true;
                 } else {
                     System.out.println("Preço inválido. Digite um valor maior que zero.");
                 }
-            } else {
-                System.out.println("Valor inválido. Digite um número.");
-                scanner.next();
+            } catch (NumberFormatException e) {
+                System.out.println("Por favor, insira um número válido para o preço.");
             }
         }
         System.out.print("Digite o tipo do produto (fisico ou digital): ");
-        String tipoProduto = scanner.next().toLowerCase();
+        String tipoProduto = scanner.nextLine().toLowerCase();
         System.out.println("Tipo de produto digitado: " + tipoProduto);
         Produto produto;
         if (tipoProduto.equals("fisico")) {
             System.out.print("Digite a descrição do produto físico: ");
             String descricao = scanner.nextLine();
-            descricao = scanner.nextLine();
             produto = new ProdutoFisico(nome, preco, descricao);
         } else if (tipoProduto.equals("digital")) {
             System.out.print("Digite o link de download do produto digital: ");
             String linkDownload = scanner.nextLine();
-            linkDownload = scanner.nextLine();
             produto = new ProdutoDigital(nome, preco, linkDownload);
         } else {
             System.out.println("Tipo de produto inválido: " + tipoProduto);
@@ -77,7 +78,6 @@ public class Main {
         produtos.add(produto);
         System.out.println("Produto cadastrado com sucesso!");
     }
-
 
     private static void visualizarProdutos() {
         System.out.println("\n===== Produtos Cadastrados =====");
